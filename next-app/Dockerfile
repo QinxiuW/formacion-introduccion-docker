@@ -1,20 +1,10 @@
+FROM node:14.0.0
+ENV HOST 0.0.0.0
+COPY ./ /app
+WORKDIR /app
+RUN NODE_ENV=build npm install
 
-# Dockerfile
-
-# base image
-FROM node:alpine
-
-# create & set working directory
-RUN mkdir -p /usr/src
-WORKDIR /usr/src
-
-# copy source files
-COPY . /usr/src
-
-# install dependencies
-RUN npm install
-
-# start app
-RUN npm run build
 EXPOSE 3000
-CMD npm run start
+RUN yarn install && yarn build
+
+CMD [ "node", "node_modules/nuxt/bin/nuxt.js" ]
