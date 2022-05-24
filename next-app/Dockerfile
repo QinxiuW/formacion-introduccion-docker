@@ -1,10 +1,9 @@
 FROM node:14.0.0
-ENV HOST 0.0.0.0
 COPY ./ /app
 WORKDIR /app
-RUN NODE_ENV=build npm install
+RUN npm install && npm run build
 
-EXPOSE 3000
-RUN yarn install && yarn build
-
-CMD [ "node", "node_modules/nuxt/bin/nuxt.js" ]
+FROM nginx
+RUN mkdir /app
+COPY --from=0 /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf
